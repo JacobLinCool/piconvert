@@ -20,17 +20,17 @@ runs:
         - name: Prepare Environment
           shell: bash
           run: |
-              apt-get update && apt-get install -y inkscape
+              sudo apt-get update && sudo apt-get install -y inkscape
 
         - name: Install Piconvert
           shell: bash
           run: |
-              npm i -g piconvert
+              sudo npm i -g piconvert
 
         - name: Run Piconvert
           shell: bash
           run: |
-              piconvert -f "${{ inputs.formats }}" -o "${{ inputs.dist }}" "${{ inputs.source}}"
+              sudo piconvert -f "${{ inputs.formats }}" -o "${{ inputs.dist }}" "${{ inputs.source}}"
 
 branding:
     icon: image
