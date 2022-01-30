@@ -2,7 +2,7 @@ import type { ExportFormat } from "./types";
 import { execSync } from "child_process";
 import { existsSync, mkdirSync } from "fs";
 import { resolve, basename, dirname } from "path";
-import { green, red, yellow, cyan, blue } from "./colors";
+import { green, red, yellow } from "./colors";
 
 /**
  * Convert AI file to given formats
@@ -36,13 +36,18 @@ export default async function convert(
             if (!existsSync(output_dir)) {
                 mkdirSync(output_dir, { recursive: true });
             }
-            const output = resolve(output_dir, `${basename(source).replace(/\.[Aa][Ii]$/, "")}.${converter.format}`);
+            const output = resolve(output_dir, `${basename(source).replace(/\..+$/, "")}.${converter.format}`);
 
             if (force || !existsSync(output)) {
                 try {
-                    execSync(`${process.env.SUDO_UID ? "sudo " : ""}inkscape ${source} ${converter.options.join(" ")} -o ${output}`, {
-                        stdio: verbase ? "inherit" : "ignore",
-                    });
+                    execSync(
+                        `${process.env.SUDO_UID ? "sudo " : ""}inkscape "${source.replace(/(?<!\\)"/g, '\\"')}" ${converter.options.join(
+                            " ",
+                        )} -o "${output.replace(/(?<!\\)"/g, '\\"')}"`,
+                        {
+                            stdio: verbase ? "inherit" : "ignore",
+                        },
+                    );
                     silent || console.log(green(`    -> ${converter.format} Success!`));
                 } catch (e) {
                     silent || console.error(red(`    -> ${converter.format} Failed.`));

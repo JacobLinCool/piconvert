@@ -1,7 +1,7 @@
 {
     "name": "piconvert",
-    "version": "0.1.3",
-    "description": "Convert AI (Adobe Illustrator) pictures to other formats.",
+    "version": "0.2.0",
+    "description": "Convert pictures to other formats. Supports ai, cdr, vsd, pdf, and more formats. GitHub Actions & CLI Tool.",
     "main": "dist/index.js",
     "bin": {
         "piconvert": "dist/index.js"
@@ -18,7 +18,8 @@
         "Adobe Illustrator",
         "Convert",
         "SVG",
-        "PNG"
+        "Inkscape",
+        "GitHub Actions"
     ],
     "author": "JacobLinCool <jacoblincool@gmail.com> (https://github.com/JacobLinCool)",
     "license": "MIT",
@@ -41,5 +42,13 @@
     "dependencies": {
         "chalk": "4.1.2",
         "commander": "^9.0.0"
+    },
+    "homepage": "https://github.com/JacobLinCool/piconvert",
+    "bugs": {
+        "url": "https://github.com/JacobLinCool/piconvert/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/JacobLinCool/piconvert.git"
     }
 }

@@ -1,19 +1,25 @@
 name: "Piconvert"
-description: "Convert AI (Adobe Illustrator) pictures to other formats."
+description: "Convert pictures to other formats. Supports ai, cdr, vsd, pdf, and more formats."
 author: "JacobLinCool"
+
 inputs:
-    source:
-        description: "Input path. If it's a directory, all AI files in it and its subdirectories will be converted."
+    src:
+        description: "Source path. If it's a directory, all files matched selected import types in it and its subdirectories will be converted."
         required: false
         default: "pictures"
     dist:
-        description: "Output directory path."
+        description: "Output directory."
         required: false
         default: "piconvert"
-    formats:
-        description: "Output Formats. svg,png,ps,eps,pdf,emf,wmf,xaml"
+    inputs:
+        description: "Import (input) formats. Supports: ai,cdr,vsd,pdf,jpg,jpeg,png,gif,bmp"
+        required: false
+        default: "ai"
+    outputs:
+        description: "Export (output) formats. Supports: svg,png,ps,eps,pdf,emf,wmf,xaml"
         required: false
         default: "svg,png"
+
 runs:
     using: "composite"
     steps:
