@@ -18,6 +18,7 @@ export default async function convert(
     formats: ExportFormat[],
     force: boolean,
     silent: boolean,
+    verbase: boolean,
 ): Promise<boolean> {
     const converters = formats.map((format) => {
         const options = ["--export-area-page", `--export-type=${format}`];
@@ -40,7 +41,7 @@ export default async function convert(
             if (force || !existsSync(output)) {
                 try {
                     execSync(`${process.env.SUDO_UID ? "sudo " : ""}inkscape ${source} ${converter.options.join(" ")} -o ${output}`, {
-                        stdio: "ignore",
+                        stdio: verbase ? "inherit" : "ignore",
                     });
                     silent || console.log(green(`    -> ${converter.format} Success!`));
                 } catch (e) {

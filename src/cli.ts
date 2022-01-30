@@ -16,7 +16,10 @@ program
     .option("-f, --formats <formats>", "Output Formats. svg,png,ps,eps,pdf,emf,wmf,xaml", "svg,png")
     .option("-F, --force", "Force Overwrite", false)
     .option("-s, --silent", "Silent Mode", false)
+    .option("-v, --verbose", "Verbose Mode", false)
     .action(async (path) => {
+        console.log(cyan("piconvert") + " " + yellow("v" + pkg.version));
+
         if (check_inkscape() === false) {
             console.error(red("Inkscape is not installed."));
 
@@ -54,11 +57,12 @@ program
             .filter((format: null | ExportFormat) => format !== null);
         const force = program.opts().force;
         const silent = program.opts().silent;
+        const verbase = program.opts().verbose;
 
         for (const file of files) {
             const short = file.replace(path, "");
             silent || console.log(blue(`Converting ${short}`));
-            const converted = await convert(file, file.replace(path, output), formats, force, silent);
+            const converted = await convert(file, file.replace(path, output), formats, force, silent, verbase);
             silent || !converted || console.log(green(`${short} Converted!`));
         }
     });

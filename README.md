@@ -13,6 +13,7 @@ Convert AI (Adobe Illustrator) pictures to other formats.
 -   `format`: Output Format (default: `svg,png`)
 -   `force`: Force Overwrite (default: `false`)
 -   `silent`: Silent Mode (default: `false`)
+-   `verbose`: Verbose Mode (default: `false`)
 
 ## Requirements
 
