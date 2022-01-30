@@ -39,7 +39,9 @@ export default async function convert(
 
             if (force || !existsSync(output)) {
                 try {
-                    execSync(`inkscape ${source} ${converter.options.join(" ")} -o ${output}`, { stdio: "ignore" });
+                    execSync(`${process.env.SUDO_UID ? "sudo " : ""}inkscape ${source} ${converter.options.join(" ")} -o ${output}`, {
+                        stdio: "ignore",
+                    });
                     silent || console.log(green(`    -> ${converter.format} Success!`));
                 } catch (e) {
                     silent || console.error(red(`    -> ${converter.format} Failed.`));

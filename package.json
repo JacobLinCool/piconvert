@@ -1,6 +1,6 @@
 {
     "name": "piconvert",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Convert AI (Adobe Illustrator) pictures to other formats.",
     "main": "dist/index.js",
     "bin": {
