@@ -1,0 +1,10 @@
+# don't lint node_modules
+node_modules
+
+# don't lint build output
+dist
+
+# ignore config files
+.eslintrc.js
+jest.config.js
+# tsup.config.ts

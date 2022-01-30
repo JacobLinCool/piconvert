@@ -1,0 +1,37 @@
+name: "Piconvert"
+description: "Convert AI (Adobe Illustrator) pictures to other formats."
+author: "JacobLinCool"
+inputs:
+    source:
+        description: "Input path. If it's a directory, all AI files in it and its subdirectories will be converted."
+        required: false
+        default: "pictures"
+    dist:
+        description: "Output directory path."
+        required: false
+        default: "piconvert"
+    formats:
+        description: "Output Formats. svg,png,ps,eps,pdf,emf,wmf,xaml"
+        required: false
+        default: "svg,png"
+runs:
+    using: "composite"
+    steps:
+        - name: Prepare Environment
+          shell: bash
+          run: |
+              apt-get update && apt-get install -y inkscape
+
+        - name: Install Piconvert
+          shell: bash
+          run: |
+              npm i -g piconvert
+
+        - name: Run Piconvert
+          shell: bash
+          run: |
+              piconvert -f "${{ inputs.formats }}" -o "${{ inputs.dist }}" "${{ inputs.source}}"
+
+branding:
+    icon: image
+    color: purple
