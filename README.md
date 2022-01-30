@@ -13,7 +13,7 @@ Convert pictures to other formats. GitHub Actions & CLI Tool supported.
 
 ```yaml
 - name: Piconvert
-  uses: JacobLinCool/piconvert@0.1.3
+  uses: JacobLinCool/piconvert@0.2.0
     with:
       src: ./pictures
       dist: ./piconvert
