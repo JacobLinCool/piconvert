@@ -20,7 +20,7 @@ runs:
         - name: Prepare Environment
           shell: bash
           run: |
-              sudo apt-get update && sudo apt-get install -y inkscape
+              sudo add-apt-repository ppa:inkscape.dev/stable && sudo apt update && sudo apt install -y inkscape
 
         - name: Install Piconvert
           shell: bash
