@@ -60,7 +60,7 @@ export class Converter extends EventEmitter {
                     mkdirSync(dir, { recursive: true });
                 }
 
-                const command = `Inkscape ${options.join(" ")} "${source}"`;
+                const command = `inkscape ${options.join(" ")} "${source}"`;
 
                 if (verbose) {
                     console.log("Run", command);

@@ -1,6 +1,6 @@
 {
     "name": "piconvert",
-    "version": "0.3.3",
+    "version": "0.3.5",
     "description": "Convert pictures to other formats. Supports ai, cdr, vsd, pdf, and more formats. GitHub Actions & CLI Tool.",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -10,7 +10,7 @@
     "scripts": {
         "test": "jest --coverage",
         "dev": "tsup --watch",
-        "prepublish": "npm run build",
+        "prepare": "npm run build",
         "build": "tsup",
         "docs": "typedoc ./src/",
         "format": "prettier --write '**/*.{js,ts,jsx,tsx,json,yml,yaml,md,html}' '!dist' '!coverage' '!docs'",
