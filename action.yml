@@ -36,7 +36,7 @@ runs:
         - name: Run Piconvert
           shell: bash
           run: |
-              sudo piconvert -v -f "${{ inputs.formats }}" -o "${{ inputs.dist }}" "${{ inputs.source }}"
+              sudo piconvert -v -i "${{ inputs.inputs }}" -o "${{ inputs.outputs }}" -d "${{ inputs.dist }}" "${{ inputs.src }}"
 
 branding:
     icon: image
