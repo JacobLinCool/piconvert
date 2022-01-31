@@ -82,3 +82,7 @@ dist/
 
 # piconvert
 piconvert/
+pictures/
+
+# docs
+docs/

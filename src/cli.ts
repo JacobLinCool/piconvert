@@ -2,9 +2,9 @@ import type { ImportFormat, ExportFormat } from "./types";
 import { program } from "commander";
 import { readFileSync, existsSync } from "fs";
 import { resolve } from "path";
-import convert from "./convert";
-import { green, red, yellow, cyan, blue } from "./colors";
-import { find_matched, check_inkscape, export_formats, import_formats } from "./utils";
+import Converter from "./converter";
+import { green, red, yellow, cyan, blue, magenta } from "./colors";
+import { check_inkscape, export_formats, import_formats } from "./utils";
 
 const pkg = JSON.parse(readFileSync(resolve(__dirname, "../package.json"), "utf8"));
 
@@ -74,14 +74,41 @@ program
             process.exit(1);
         }
 
-        const files = find_matched(path, imputs);
+        const converter = new Converter();
 
-        for (const file of files) {
-            const short = file.replace(path, "");
-            silent || console.log(blue(`Converting ${short}`));
-            const converted = await convert(file, file.replace(path, output_dir), outputs, force, silent, verbase);
-            silent || !converted || console.log(green(`${short} Converted!`));
+        for (const input of imputs) {
+            converter.import(input);
         }
+        for (const output of outputs) {
+            converter.export(output);
+        }
+
+        converter.on("conversion-start", (source, dest) => {
+            silent || console.log(magenta("[Conversion started] ") + yellow(source) + " -> " + yellow(dest));
+        });
+        converter.on("conversion-finish", (source, dest) => {
+            silent || console.log(magenta("[Conversion finished] ") + yellow(source) + " -> " + yellow(dest));
+        });
+        converter.on("directory-start", (source) => {
+            silent || console.log(magenta("[Directory started] ") + yellow(source.replace(path, "") + "/"));
+        });
+        converter.on("directory-finish", (source) => {
+            silent || console.log(magenta("[Directory finished] ") + yellow(source.replace(path, "") + "/"));
+        });
+        converter.on("task-start", (source, dest, config) => {
+            silent || console.log(magenta("[Task started] ") + blue(source.replace(path, "")) + " " + cyan(config.format));
+        });
+        converter.on("task-succeeded", (source, dest, config) => {
+            silent || console.log(magenta("[Task succeeded] ") + green(source.replace(path, "")) + " " + cyan(config.format));
+        });
+        converter.on("task-failed", (source, dest, config) => {
+            silent || console.log(magenta("[Task failed] ") + red(source.replace(path, "")) + " " + cyan(config.format));
+        });
+        converter.on("task-skipped", (source, dest, config) => {
+            silent || console.log(magenta("[Task skipped] ") + yellow(source.replace(path, "")) + " " + cyan(config.format));
+        });
+
+        converter.run(path, output_dir, true, force, verbase);
     });
 
 program.parse();

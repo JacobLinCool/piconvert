@@ -1,6 +1,6 @@
 # piconvert
 
-Convert pictures to other formats. GitHub Actions & CLI Tool supported.
+Convert pictures to other formats. GitHub Actions, CLI Tool, and Node Package.
 
 ## Features
 
@@ -45,6 +45,57 @@ Options:
   -v, --verbose            Verbose mode, print all Inkscape output (default: false)
   -h, --help               display help for command
 ```
+
+### Library
+
+```javascript
+const Piconvert = require("piconvert");
+
+const converter = new Piconvert()
+                      .import("ai")
+                      .export("svg")
+                      .export("png", [128, 256, "256x128", "x512"]);
+
+converter.run("./src", "./dest");
+```
+
+## Config File
+
+There are two types of config files: folder-level and file-level.
+
+### Folder-level Config File
+
+The folder-level config file is a YAML file named `piconvert.yml`, `piconvert.yaml`, `.piconvert.yml`, or `.piconvert.yaml`.
+
+The configurations in this file will be applied to all files in the folder.
+
+### File-level Config File
+
+The file-level config file is a YAML file named with the same name as the source file, for `picture_123.ai`, it should be named `picture_123.yml` or `picture_123.yaml`.
+
+### Config File Structure
+
+The config file structure is as follows:
+
+```yaml
+svg:
+png:
+  - 128
+  - "256x128"
+  - "x512"
+pdf:
+```
+
+All the keys in the config file are supported export formats with an optional value of sizes.
+
+### Priority
+
+The priority of config files is as follows:
+
+1. File-level config file
+2. Folder-level config file
+3. Parent folder-level config file (if exists)
+4. Default configs
 
 ## Requirement
 
