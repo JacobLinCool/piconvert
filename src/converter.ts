@@ -173,7 +173,7 @@ export class Converter extends EventEmitter {
         this.emit("directory-finish", source, dir, types, parent_config, force, verbose, recursive);
 
         if (recursive) {
-            const subdirs = directories.map((dir) => resolve(source, dir));
+            const subdirs = directories.filter((dir) => dir[0] && dir[0] !== ".").map((dir) => resolve(source, dir));
             for (const subdir of subdirs) {
                 await this.convert_directory(subdir, resolve(dir, basename(subdir)), types, folder_config, force, verbose, recursive);
             }
