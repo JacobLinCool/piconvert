@@ -86,6 +86,7 @@ export class Converter extends EventEmitter {
      * @param verbose Whether to print Inkscape output
      */
     async convert_file(source: string, dir: string, parent_config: OutputConfig, force = false, verbose = false): Promise<void> {
+        this.emit("file-start", source, dir, parent_config, force, verbose);
         const file_config_name = resolve(dirname(source), source.split(".").slice(0, -1).join("."));
 
         const file_config_path = existsSync(file_config_name + ".yml")
@@ -122,6 +123,8 @@ export class Converter extends EventEmitter {
         for (const config of configs) {
             await this.convert(source, dir, config, verbose);
         }
+
+        this.emit("file-finish", source, dir, parent_config, force, verbose);
     }
 
     /**
@@ -221,7 +224,7 @@ export class Converter extends EventEmitter {
     }
 
     /**
-     *
+     * Execute the conversion
      * @param source Path to source directory
      * @param dest Path to destination directory
      * @param recursive Whether to recursively convert files in subdirectories
@@ -271,6 +274,11 @@ export declare interface Converter {
             verbose: boolean,
             recursive: boolean,
         ) => void,
+    ): this;
+    on(event: "file-start", listener: (source: string, dest: string, config: OutputConfig, force: boolean, verbose: boolean) => void): this;
+    on(
+        event: "file-finish",
+        listener: (source: string, dest: string, config: OutputConfig, force: boolean, verbose: boolean) => void,
     ): this;
     on(event: "task-start", listener: (source: string, dest: string, config: Config) => void): this;
     on(event: "task-succeeded", listener: (source: string, dest: string, config: Config) => void): this;

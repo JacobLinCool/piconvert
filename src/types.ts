@@ -17,6 +17,8 @@ export type ConverterEvent =
     | "conversion-finish"
     | "directory-start"
     | "directory-finish"
+    | "file-start"
+    | "file-finish"
     | "task-start"
     | "task-succeeded"
     | "task-skipped"
