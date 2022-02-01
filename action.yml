@@ -43,10 +43,10 @@ runs:
         - name: Install Dependencies
           shell: bash
           run: |
-              if [ "$RUNNER_OS" == "Windows" ]; then
-                  piconvert install ${{ inputs.verbose == 'true' && '-v' || '' }}
-              else
+              if [ "$RUNNER_OS" == "Linux" ]; then
                   sudo piconvert install ${{ inputs.verbose == 'true' && '-v' || '' }}
+              else
+                  piconvert install ${{ inputs.verbose == 'true' && '-v' || '' }}
               fi
 
         - name: Run Piconvert
