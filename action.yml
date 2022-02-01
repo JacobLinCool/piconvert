@@ -52,7 +52,11 @@ runs:
         - name: Run Piconvert
           shell: bash
           run: |
-              piconvert -i "${{ inputs.inputs }}" -o "${{ inputs.outputs }}" -d "${{ inputs.dist }}" ${{ inputs.force == 'true' && '-f' || '' }} ${{ inputs.silent == 'true' && '-s' || '' }} ${{ inputs.verbose == 'true' && '-v' || '' }} "${{ inputs.src }}"
+              if [ "$RUNNER_OS" == "Linux" ]; then
+                  sudo piconvert -i "${{ inputs.inputs }}" -o "${{ inputs.outputs }}" -d "${{ inputs.dist }}" ${{ inputs.force == 'true' && '-f' || '' }} ${{ inputs.silent == 'true' && '-s' || '' }} ${{ inputs.verbose == 'true' && '-v' || '' }} "${{ inputs.src }}"
+              else
+                  piconvert -i "${{ inputs.inputs }}" -o "${{ inputs.outputs }}" -d "${{ inputs.dist }}" ${{ inputs.force == 'true' && '-f' || '' }} ${{ inputs.silent == 'true' && '-s' || '' }} ${{ inputs.verbose == 'true' && '-v' || '' }} "${{ inputs.src }}"
+              fi
 
 branding:
     icon: image
