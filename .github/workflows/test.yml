@@ -29,3 +29,6 @@ jobs:
               uses: ./
               with:
                   verbose: true
+
+            - name: Check Outputs
+              run: ls ./piconvert
