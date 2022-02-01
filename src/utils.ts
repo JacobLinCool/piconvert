@@ -10,7 +10,7 @@ export const export_formats: ExportFormat[] = ["svg", "png", "ps", "eps", "pdf",
  */
 export function check_inkscape(): boolean {
     try {
-        const output = execSync("inkscape --version");
+        const output = execSync("inkscape --version", { stdio: "pipe" });
         return output.toString().match(/\d+\.\d+\.\d+/) !== null;
     } catch (e) {
         return false;
