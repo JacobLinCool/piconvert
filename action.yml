@@ -19,24 +19,36 @@ inputs:
         description: "Export (output) formats. Supports: svg,png,ps,eps,pdf,emf,wmf,xaml"
         required: false
         default: "svg,png"
+    force:
+        description: "Overwrite existing files"
+        required: false
+        default: "false"
+    silent:
+        description: "Silent mode, no output"
+        required: false
+        default: "false"
+    verbose:
+        description: "Verbose mode, print all Inkscape output"
+        required: false
+        default: "false"
 
 runs:
     using: "composite"
     steps:
-        - name: Prepare Environment
-          shell: bash
-          run: |
-              sudo add-apt-repository ppa:inkscape.dev/stable && sudo apt update && sudo apt install -y inkscape
-
         - name: Install Piconvert
           shell: bash
           run: |
               sudo npm i -g piconvert
 
+        - name: Install Dependencies
+          shell: bash
+          run: |
+              sudo piconvert install
+
         - name: Run Piconvert
           shell: bash
           run: |
-              sudo piconvert -v -i "${{ inputs.inputs }}" -o "${{ inputs.outputs }}" -d "${{ inputs.dist }}" "${{ inputs.src }}"
+              sudo piconvert -i "${{ inputs.inputs }}" -o "${{ inputs.outputs }}" -d "${{ inputs.dist }}" ${{ inputs.force == 'true' && '-f' || '' }} ${{ inputs.silent == 'true' && '-s' || '' }} ${{ inputs.verbose == 'true' && '-v' || '' }} "${{ inputs.src }}"
 
 branding:
     icon: image

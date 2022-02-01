@@ -5,6 +5,7 @@ import { resolve } from "path";
 import Converter from "./converter";
 import { green, red, yellow, cyan, blue, magenta } from "./colors";
 import { check_inkscape, export_formats, import_formats } from "./utils";
+import { install_inkscape } from "./installs/inkscape";
 
 const pkg = JSON.parse(readFileSync(resolve(__dirname, "../package.json"), "utf8"));
 
@@ -59,7 +60,9 @@ program
             console.error(red("Inkscape is not installed."));
 
             if (process.platform === "linux") {
-                console.log("Install via: " + yellow("apt-get install -y inkscape"));
+                console.log(
+                    "Install via: " + yellow("add-apt-repository -y ppa:inkscape.dev/stable && apt update && apt install -y inkscape"),
+                );
             } else if (process.platform === "darwin") {
                 console.log("Install via: " + yellow("brew install --cask inkscape"));
             } else {
@@ -125,6 +128,19 @@ program
         });
 
         converter.run(path, output_dir, true, force, verbase);
+    });
+
+program
+    .command("install")
+    .option("-v, --verbose", "Verbose mode, print execution output", false)
+    .action(async () => {
+        const installed = await install_inkscape(program.opts().verbose);
+
+        if (installed) {
+            console.log(green("Inkscape installed."));
+        } else {
+            console.log(red("Cannot install Inkscape."));
+        }
     });
 
 program.parse();
