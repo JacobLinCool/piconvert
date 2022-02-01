@@ -13,12 +13,14 @@ Convert pictures to other formats. GitHub Actions, CLI Tool, and Node Package.
 
 ```yaml
 - name: Piconvert
-  uses: JacobLinCool/piconvert@0.2.0
+  uses: JacobLinCool/piconvert@0.4.2
     with:
       src: ./pictures
       dist: ./piconvert
       inputs: ai
       outputs: svg,png
+      force: false
+      verbose: false
 ```
 
 See [action.yml](./action.yml) for more details.
