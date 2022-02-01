@@ -23,7 +23,7 @@ export async function install_inkscape(verbose = false): Promise<boolean> {
         if (process.platform === "linux") {
             command = `${sudo}add-apt-repository -y ppa:inkscape.dev/stable && ${sudo}apt update && ${sudo}apt install -y inkscape`;
         } else if (process.platform === "darwin") {
-            command = `${sudo}brew install --cask inkscape`;
+            command = "brew install --cask inkscape";
         } else if (process.platform === "win32") {
             command = "choco install inkscape";
         } else {
