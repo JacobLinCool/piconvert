@@ -27,3 +27,5 @@ jobs:
 
             - name: Test Self
               uses: ./
+              with:
+                  verbose: true
