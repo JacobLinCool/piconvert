@@ -89,23 +89,39 @@ program
         converter.on("conversion-finish", (source, dest) => {
             silent || console.log(magenta("[Conversion finished] ") + yellow(source) + " -> " + yellow(dest));
         });
-        converter.on("directory-start", (source) => {
-            silent || console.log(magenta("[Directory started] ") + yellow(source.replace(path, "") + "/"));
+        converter.on("directory-start", () => {
+            silent || console.group();
         });
-        converter.on("directory-finish", (source) => {
-            silent || console.log(magenta("[Directory finished] ") + yellow(source.replace(path, "") + "/"));
+        converter.on("directory-finish", () => {
+            silent || console.groupEnd();
         });
-        converter.on("task-start", (source, dest, config) => {
-            silent || console.log(magenta("[Task started] ") + blue(source.replace(path, "")) + " " + cyan(config.format));
+        converter.on("file-start", (source) => {
+            silent || console.log(magenta("[File]"), blue(source.replace(path, "").substring(1)));
+            silent || console.group();
+        });
+        converter.on("file-finish", () => {
+            silent || console.groupEnd();
         });
         converter.on("task-succeeded", (source, dest, config) => {
-            silent || console.log(magenta("[Task succeeded] ") + green(source.replace(path, "")) + " " + cyan(config.format));
+            silent ||
+                console.log(
+                    green("[Succeeded]"),
+                    cyan(config.format + " " + (config.width || "") + (config.width || config.height ? "x" : "") + (config.height || "")),
+                );
         });
         converter.on("task-failed", (source, dest, config) => {
-            silent || console.log(magenta("[Task failed] ") + red(source.replace(path, "")) + " " + cyan(config.format));
+            silent ||
+                console.log(
+                    red("[Failed]"),
+                    cyan(config.format + " " + (config.width || "") + (config.width || config.height ? "x" : "") + (config.height || "")),
+                );
         });
         converter.on("task-skipped", (source, dest, config) => {
-            silent || console.log(magenta("[Task skipped] ") + yellow(source.replace(path, "")) + " " + cyan(config.format));
+            silent ||
+                console.log(
+                    yellow("[Skipped]"),
+                    cyan(config.format + " " + (config.width || "") + (config.width || config.height ? "x" : "") + (config.height || "")),
+                );
         });
 
         converter.run(path, output_dir, true, force, verbase);
