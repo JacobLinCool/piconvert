@@ -4,5 +4,8 @@
     "useTabs": false,
     "trailingComma": "all",
     "semi": true,
-    "singleQuote": false
+    "singleQuote": false,
+    "importOrder": ["^node:", "^[^@.]", "^@", "^\\."],
+    "importOrderSortSpecifiers": true,
+    "plugins": ["./node_modules/@trivago/prettier-plugin-sort-imports/lib/src/index.js"]
 }

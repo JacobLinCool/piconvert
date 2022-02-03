@@ -1,9 +1,9 @@
+import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
+import { basename, dirname, resolve } from "node:path";
 import EventEmitter from "events";
-import { execSync } from "child_process";
-import { existsSync, mkdirSync, readFileSync, readdirSync, statSync } from "fs";
-import { resolve, basename, dirname } from "path";
 import yaml from "js-yaml";
-import { Config, OutputConfig, ExportFormat, ImportFormat, ConverterEvent } from "./types";
+import { convert, from_svg, to_svg } from "./convert";
+import { Config, ConverterEvent, ExportFormat, ImportFormat, OutputConfig } from "./types";
 
 export class Converter extends EventEmitter {
     private imports: ImportFormat[] = [];
@@ -13,7 +13,7 @@ export class Converter extends EventEmitter {
      * @param event Converter event name
      * @param args Arguments for the event
      */
-    emit(event: ConverterEvent, ...args: unknown[]): boolean {
+    public emit(event: ConverterEvent, ...args: unknown[]): boolean {
         return super.emit(event, ...args);
     }
 
@@ -22,18 +22,19 @@ export class Converter extends EventEmitter {
      * @param listener Listener function
      */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    on(event: ConverterEvent, listener: (...args: any[]) => void): this {
+    public on(event: ConverterEvent, listener: (...args: any[]) => void): this {
         return super.on(event, listener);
     }
 
     /**
      * Inner Convert Function
+     * @param svg SVG string
      * @param source Absolute path to source file
      * @param dir Absolute path to the destination directory
      * @param config Configuration object
      * @param verbose Whether to print Inkscape output
      */
-    private async convert(source: string, dir: string, config: Config, verbose = false): Promise<void> {
+    private async convert(svg: string, source: string, dir: string, config: Config, verbose = false): Promise<void> {
         this.emit("task-start", source, dir, config);
         try {
             const dest = resolve(
@@ -43,36 +44,22 @@ export class Converter extends EventEmitter {
                 }.${config.format}`,
             );
 
-            const options = ["--export-area-page", `--export-type "${config.format}"`];
-
-            if (config.width) {
-                options.push(`--export-width "${config.width}"`);
-            }
-
-            if (config.height) {
-                options.push(`--export-height "${config.height}"`);
-            }
-
-            options.push(`--export-filename "${dest}"`);
-
             if (config.force || !existsSync(dest)) {
                 if (!existsSync(dir)) {
                     mkdirSync(dir, { recursive: true });
                 }
 
-                const command = `inkscape ${options.join(" ")} "${source}"`;
-
-                if (verbose) {
-                    console.log("Run", command);
-                }
-
-                execSync(command, { stdio: verbose ? "inherit" : "ignore" });
+                const converted = await from_svg(svg, config.format, config.width, config.height, verbose);
+                writeFileSync(dest, converted);
 
                 this.emit("task-succeeded", source, dir, config);
             } else {
                 this.emit("task-skipped", source, dir, config);
             }
-        } catch {
+        } catch (err) {
+            if (verbose) {
+                console.error(err);
+            }
             this.emit("task-failed", source, dir, config);
         }
     }
@@ -120,8 +107,10 @@ export class Converter extends EventEmitter {
             }
         }
 
+        const svg = to_svg(source, verbose);
+
         for (const config of configs) {
-            await this.convert(source, dir, config, verbose);
+            await this.convert(svg, source, dir, config, verbose);
         }
 
         this.emit("file-finish", source, dir, parent_config, force, verbose);

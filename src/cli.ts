@@ -1,11 +1,11 @@
-import type { ImportFormat, ExportFormat } from "./types";
+import { existsSync, readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { program } from "commander";
-import { readFileSync, existsSync } from "fs";
-import { resolve } from "path";
+import { blue, cyan, green, magenta, red, yellow } from "./colors";
 import Converter from "./converter";
-import { green, red, yellow, cyan, blue, magenta } from "./colors";
-import { check_inkscape, export_formats, import_formats } from "./utils";
 import { install_inkscape } from "./installs/inkscape";
+import type { ExportFormat, ImportFormat } from "./types";
+import { check_inkscape, export_formats, import_formats } from "./utils";
 
 const pkg = JSON.parse(readFileSync(resolve(__dirname, "../package.json"), "utf8"));
 
