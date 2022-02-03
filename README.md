@@ -46,17 +46,25 @@ Options:
   -s, --silent             Silent mode, no output (default: false)
   -v, --verbose            Verbose mode, print all Inkscape output (default: false)
   -h, --help               display help for command
+
+Commands:
+  install [options]
 ```
 
+![CLI Demo](images/piconvert-demo.png)
+
 ### Library
+
+```bash
+npm install piconvert
+# or: yarn add piconvert
+# or: pnpm install piconvert
+```
 
 ```javascript
 const Piconvert = require("piconvert");
 
-const converter = new Piconvert()
-                      .import("ai")
-                      .export("svg")
-                      .export("png", [128, 256, "256x128", "x512"]);
+const converter = new Piconvert().import("ai").export("svg").export("png", [128, 256, "256x128", "x512"]);
 
 converter.run("./src", "./dest");
 ```
@@ -82,9 +90,9 @@ The config file structure is as follows:
 ```yaml
 svg:
 png:
-  - 128
-  - "256x128"
-  - "x512"
+    - 128
+    - "256x128"
+    - "x512"
 pdf:
 ```
 
@@ -104,6 +112,8 @@ The priority of config files is as follows:
 If you are using GitHub Actions, then you don't need to install any dependencies.
 
 But if you are using the cli tool on your computer, make sure you have installed `inkscape` first.
+
+(You can use `piconvert install` to install `inkscape`. On linux, it uses `apt`. On macOS, it uses `brew`. On Windows, it uses `choco`.)
 
 ## Links
 
