@@ -5,3 +5,17 @@ png:
     - 1024
 svg:
 pdf:
+nosuportted:
+jpg:
+    - 128
+    - 256
+    - 512
+    - 1024
+webp:
+    - 128
+    - 256
+    - 512
+    - 1024
+gif:
+avif:
+tiff:
