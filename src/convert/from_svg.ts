@@ -16,7 +16,13 @@ type InkscapeFormat = typeof inkscape_supported_types[number];
  * @param verbose
  * @returns
  */
-export async function from_svg(svg: string, type: string, width: number | null, height: number | null, verbose = false): Promise<Buffer> {
+export async function from_svg(
+    svg: string,
+    type: string,
+    width: number | null,
+    height: number | null,
+    verbose = false,
+): Promise<Buffer> {
     type = normalize_type(type);
     const label = `svg -> ${type} ${width || ""}x${height || ""}`;
 

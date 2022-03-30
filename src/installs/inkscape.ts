@@ -27,7 +27,8 @@ export async function install_inkscape(verbose = false): Promise<boolean> {
         } else if (process.platform === "win32") {
             command = "choco install inkscape";
         } else {
-            command = "echo 'Please download from https://inkscape.org/release/ and install manually.'";
+            command =
+                "echo 'Please download from https://inkscape.org/release/ and install manually.'";
         }
 
         execSync(command, { stdio: verbose ? "inherit" : "ignore" });

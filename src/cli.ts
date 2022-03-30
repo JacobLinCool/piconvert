@@ -18,8 +18,16 @@ program
         "pictures",
     )
     .option("-d, --dir <directory>", "Output directory", "piconvert")
-    .option("-i, --inputs <formats>", "Import (input) formats. Supports: " + import_formats.map((f) => yellow(f)).join(","), "ai")
-    .option("-o, --outputs <formats>", "Export (output) formats. Supports: " + export_formats.map((f) => yellow(f)).join(","), "svg,png")
+    .option(
+        "-i, --inputs <formats>",
+        "Import (input) formats. Supports: " + import_formats.map((f) => yellow(f)).join(","),
+        "ai",
+    )
+    .option(
+        "-o, --outputs <formats>",
+        "Export (output) formats. Supports: " + export_formats.map((f) => yellow(f)).join(","),
+        "svg,png",
+    )
     .option("-f, --force", "Overwrite existing files", false)
     .option("-s, --silent", "Silent mode, no output", false)
     .option("-v, --verbose", "Verbose mode, print all Inkscape output", false)
@@ -61,7 +69,10 @@ program
 
             if (process.platform === "linux") {
                 console.log(
-                    "Install via: " + yellow("add-apt-repository -y ppa:inkscape.dev/stable && apt update && apt install -y inkscape"),
+                    "Install via: " +
+                        yellow(
+                            "add-apt-repository -y ppa:inkscape.dev/stable && apt update && apt install -y inkscape",
+                        ),
                 );
             } else if (process.platform === "darwin") {
                 console.log("Install via: " + yellow("brew install --cask inkscape"));
@@ -87,10 +98,16 @@ program
         }
 
         converter.on("conversion-start", (source, dest) => {
-            silent || console.log(magenta("[Conversion started] ") + yellow(source) + " -> " + yellow(dest));
+            silent ||
+                console.log(
+                    magenta("[Conversion started] ") + yellow(source) + " -> " + yellow(dest),
+                );
         });
         converter.on("conversion-finish", (source, dest) => {
-            silent || console.log(magenta("[Conversion finished] ") + yellow(source) + " -> " + yellow(dest));
+            silent ||
+                console.log(
+                    magenta("[Conversion finished] ") + yellow(source) + " -> " + yellow(dest),
+                );
         });
         converter.on("directory-start", () => {
             silent || console.group();
@@ -109,21 +126,39 @@ program
             silent ||
                 console.log(
                     green("[Succeeded]"),
-                    cyan(config.format + " " + (config.width || "") + (config.width || config.height ? "x" : "") + (config.height || "")),
+                    cyan(
+                        config.format +
+                            " " +
+                            (config.width || "") +
+                            (config.width || config.height ? "x" : "") +
+                            (config.height || ""),
+                    ),
                 );
         });
         converter.on("task-failed", (source, dest, config) => {
             silent ||
                 console.log(
                     red("[Failed]"),
-                    cyan(config.format + " " + (config.width || "") + (config.width || config.height ? "x" : "") + (config.height || "")),
+                    cyan(
+                        config.format +
+                            " " +
+                            (config.width || "") +
+                            (config.width || config.height ? "x" : "") +
+                            (config.height || ""),
+                    ),
                 );
         });
         converter.on("task-skipped", (source, dest, config) => {
             silent ||
                 console.log(
                     yellow("[Skipped]"),
-                    cyan(config.format + " " + (config.width || "") + (config.width || config.height ? "x" : "") + (config.height || "")),
+                    cyan(
+                        config.format +
+                            " " +
+                            (config.width || "") +
+                            (config.width || config.height ? "x" : "") +
+                            (config.height || ""),
+                    ),
                 );
         });
 

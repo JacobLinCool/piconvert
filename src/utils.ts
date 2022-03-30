@@ -1,8 +1,27 @@
 import { execSync } from "node:child_process";
 import type { ExportFormat, ImportFormat } from "./types";
 
-export const import_formats: ImportFormat[] = ["ai", "cdr", "vsd", "pdf", "jpg", "jpeg", "png", "gif", "bmp"];
-export const export_formats: ExportFormat[] = ["svg", "png", "ps", "eps", "pdf", "emf", "wmf", "xaml"];
+export const import_formats: ImportFormat[] = [
+    "ai",
+    "cdr",
+    "vsd",
+    "pdf",
+    "jpg",
+    "jpeg",
+    "png",
+    "gif",
+    "bmp",
+];
+export const export_formats: ExportFormat[] = [
+    "svg",
+    "png",
+    "ps",
+    "eps",
+    "pdf",
+    "emf",
+    "wmf",
+    "xaml",
+];
 
 /**
  * Check if Inkscape is installed

@@ -4,8 +4,8 @@ Convert pictures to other formats. GitHub Actions, CLI Tool, and Node Package.
 
 ## Features
 
--   Import (input) formats: `ai`, `cdr`, `vsd`, `pdf`, `jpg`, `png`, `gif`, and `bmp`
--   Export (output) formats: `svg`, `png`, `ps`, `eps`, `pdf`, `emf`, `wmf`, and `xaml`.
+- Import (input) formats: `ai`, `cdr`, `vsd`, `pdf`, `jpg`, `png`, `gif`, and `bmp`
+- Export (output) formats: `svg`, `png`, `ps`, `eps`, `pdf`, `emf`, `wmf`, and `xaml`.
 
 ## Usage
 
@@ -66,7 +66,10 @@ const { Converter } = require("piconvert");
 // or using ESM "import":
 // import { Converter } from "piconvert";
 
-const converter = new Converter().import("ai").export("svg").export("png", [128, 256, "256x128", "x512"]);
+const converter = new Converter()
+  .import("ai")
+  .export("svg")
+  .export("png", [128, 256, "256x128", "x512"]);
 
 converter.run("./src", "./dest");
 ```
@@ -92,9 +95,9 @@ The config file structure is as follows:
 ```yaml
 svg:
 png:
-    - 128
-    - "256x128"
-    - "x512"
+  - 128
+  - "256x128"
+  - "x512"
 pdf:
 ```
 
@@ -119,5 +122,5 @@ But if you are using the cli tool on your computer, make sure you have installed
 
 ## Links
 
--   [GitHub Actions](https://github.com/marketplace/actions/piconvert)
--   [Repository](https://github.com/JacobLinCool/piconvert)
+- [GitHub Actions](https://github.com/marketplace/actions/piconvert)
+- [Repository](https://github.com/JacobLinCool/piconvert)

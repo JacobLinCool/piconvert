@@ -2,7 +2,7 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSy
 import { basename, dirname, resolve } from "node:path";
 import EventEmitter from "events";
 import yaml from "js-yaml";
-import { convert, from_svg, to_svg } from "./convert";
+import { from_svg, to_svg } from "./convert";
 import { Config, ConverterEvent, ExportFormat, ImportFormat, OutputConfig } from "./types";
 
 export class Converter extends EventEmitter {
@@ -34,13 +34,21 @@ export class Converter extends EventEmitter {
      * @param config Configuration object
      * @param verbose Whether to print Inkscape output
      */
-    private async convert(svg: string, source: string, dir: string, config: Config, verbose = false): Promise<void> {
+    private async convert(
+        svg: string,
+        source: string,
+        dir: string,
+        config: Config,
+        verbose = false,
+    ): Promise<void> {
         this.emit("task-start", source, dir, config);
         try {
             const dest = resolve(
                 dir,
                 `${basename(source.split(".").slice(0, -1).join("."))}${
-                    config.width || config.height ? `.${config.width || ""}x${config.height || ""}` : ""
+                    config.width || config.height
+                        ? `.${config.width || ""}x${config.height || ""}`
+                        : ""
                 }.${config.format}`,
             );
 
@@ -49,7 +57,13 @@ export class Converter extends EventEmitter {
                     mkdirSync(dir, { recursive: true });
                 }
 
-                const converted = await from_svg(svg, config.format, config.width, config.height, verbose);
+                const converted = await from_svg(
+                    svg,
+                    config.format,
+                    config.width,
+                    config.height,
+                    verbose,
+                );
                 writeFileSync(dest, converted);
 
                 this.emit("task-succeeded", source, dir, config);
@@ -72,7 +86,13 @@ export class Converter extends EventEmitter {
      * @param force Whether to force conversion and overwrite existing files
      * @param verbose Whether to print Inkscape output
      */
-    async convert_file(source: string, dir: string, parent_config: OutputConfig, force = false, verbose = false): Promise<void> {
+    async convert_file(
+        source: string,
+        dir: string,
+        parent_config: OutputConfig,
+        force = false,
+        verbose = false,
+    ): Promise<void> {
         this.emit("file-start", source, dir, parent_config, force, verbose);
         const file_config_name = resolve(dirname(source), source.split(".").slice(0, -1).join("."));
 
@@ -97,8 +117,10 @@ export class Converter extends EventEmitter {
 
             if (sizes) {
                 for (const size of sizes) {
-                    const width = typeof size === "number" ? size : parseInt(size.split("x")[0]) || 0;
-                    const height = typeof size === "number" ? size : parseInt(size.split("x")[1]) || 0;
+                    const width =
+                        typeof size === "number" ? size : parseInt(size.split("x")[0]) || 0;
+                    const height =
+                        typeof size === "number" ? size : parseInt(size.split("x")[1]) || 0;
 
                     configs.push({ format, width, height, force });
                 }
@@ -140,7 +162,9 @@ export class Converter extends EventEmitter {
         const files = children
             .filter((file) => statSync(resolve(source, file)).isFile())
             .filter((file) => types.includes(file.split(".").pop()?.toLowerCase() as ImportFormat));
-        const directories = children.filter((file) => statSync(resolve(source, file)).isDirectory());
+        const directories = children.filter((file) =>
+            statSync(resolve(source, file)).isDirectory(),
+        );
 
         const folder_config_path = existsSync(resolve(source, "piconvert.yml"))
             ? resolve(source, "piconvert.yml")
@@ -165,9 +189,19 @@ export class Converter extends EventEmitter {
         this.emit("directory-finish", source, dir, types, parent_config, force, verbose, recursive);
 
         if (recursive) {
-            const subdirs = directories.filter((dir) => dir[0] && dir[0] !== ".").map((dir) => resolve(source, dir));
+            const subdirs = directories
+                .filter((dir) => dir[0] && dir[0] !== ".")
+                .map((dir) => resolve(source, dir));
             for (const subdir of subdirs) {
-                await this.convert_directory(subdir, resolve(dir, basename(subdir)), types, folder_config, force, verbose, recursive);
+                await this.convert_directory(
+                    subdir,
+                    resolve(dir, basename(subdir)),
+                    types,
+                    folder_config,
+                    force,
+                    verbose,
+                    recursive,
+                );
             }
         }
     }
@@ -220,14 +254,28 @@ export class Converter extends EventEmitter {
      * @param force Whether to force conversion and overwrite existing files
      * @param verbose Whether to print Inkscape output
      */
-    async run(source: string, dest: string, recursive = true, force = false, verbose = false): Promise<void> {
+    async run(
+        source: string,
+        dest: string,
+        recursive = true,
+        force = false,
+        verbose = false,
+    ): Promise<void> {
         source = resolve(source);
         dest = resolve(dest);
         this.emit("conversion-start", source, dest);
 
         if (existsSync(source)) {
             if (statSync(source).isDirectory()) {
-                await this.convert_directory(source, dest, this.imports, this.exports, force, verbose, recursive);
+                await this.convert_directory(
+                    source,
+                    dest,
+                    this.imports,
+                    this.exports,
+                    force,
+                    verbose,
+                    recursive,
+                );
             } else {
                 await this.convert_file(source, dest, this.exports, force, verbose);
             }
@@ -264,15 +312,39 @@ export declare interface Converter {
             recursive: boolean,
         ) => void,
     ): this;
-    on(event: "file-start", listener: (source: string, dest: string, config: OutputConfig, force: boolean, verbose: boolean) => void): this;
+    on(
+        event: "file-start",
+        listener: (
+            source: string,
+            dest: string,
+            config: OutputConfig,
+            force: boolean,
+            verbose: boolean,
+        ) => void,
+    ): this;
     on(
         event: "file-finish",
-        listener: (source: string, dest: string, config: OutputConfig, force: boolean, verbose: boolean) => void,
+        listener: (
+            source: string,
+            dest: string,
+            config: OutputConfig,
+            force: boolean,
+            verbose: boolean,
+        ) => void,
     ): this;
     on(event: "task-start", listener: (source: string, dest: string, config: Config) => void): this;
-    on(event: "task-succeeded", listener: (source: string, dest: string, config: Config) => void): this;
-    on(event: "task-skipped", listener: (source: string, dest: string, config: Config) => void): this;
-    on(event: "task-failed", listener: (source: string, dest: string, config: Config) => void): this;
+    on(
+        event: "task-succeeded",
+        listener: (source: string, dest: string, config: Config) => void,
+    ): this;
+    on(
+        event: "task-skipped",
+        listener: (source: string, dest: string, config: Config) => void,
+    ): this;
+    on(
+        event: "task-failed",
+        listener: (source: string, dest: string, config: Config) => void,
+    ): this;
 }
 
 export default Converter;
