@@ -62,9 +62,11 @@ npm install piconvert
 ```
 
 ```javascript
-const Piconvert = require("piconvert");
+const { Converter } = require("piconvert");
+// or using ESM "import":
+// import { Converter } from "piconvert";
 
-const converter = new Piconvert().import("ai").export("svg").export("png", [128, 256, "256x128", "x512"]);
+const converter = new Converter().import("ai").export("svg").export("png", [128, 256, "256x128", "x512"]);
 
 converter.run("./src", "./dest");
 ```
