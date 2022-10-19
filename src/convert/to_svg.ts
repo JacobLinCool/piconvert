@@ -33,7 +33,7 @@ export function to_svg(source: string, verbose = false): string {
     let output = "";
     if (inkscape_supported_types.includes(type as InkscapeFormat)) {
         output = execSync(
-            `inkscape --pipe --export-plain-svg --export-type svg --export-filename - "${source}"`,
+            `inkscape --pipe --export-plain-svg --pdf-poppler --export-type svg --export-filename - "${source}"`,
             {
                 stdio: "pipe",
             },
