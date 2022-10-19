@@ -8,3 +8,5 @@ dist
 .eslintrc.js
 jest.config.js
 # tsup.config.ts
+
+docs
