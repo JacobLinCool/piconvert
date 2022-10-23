@@ -1,4 +1,4 @@
-import { execSync } from "node:child_process";
+import { spawn } from "node:child_process";
 import { OptimizedSvg, optimize } from "svgo";
 import { normalize_type } from "./common";
 
@@ -21,7 +21,7 @@ type InkscapeFormat = typeof inkscape_supported_types[number];
  * @param verbose Verbose mode
  * @returns SVG string
  */
-export function to_svg(source: string, verbose = false): string {
+export async function to_svg(source: string, verbose = false): Promise<string> {
     const type = normalize_type(source);
     const label = `${type} -> svg`;
 
@@ -32,12 +32,19 @@ export function to_svg(source: string, verbose = false): string {
 
     let output = "";
     if (inkscape_supported_types.includes(type as InkscapeFormat)) {
-        output = execSync(
-            `inkscape --pipe --export-plain-svg --pdf-poppler --export-type svg --export-filename - "${source}"`,
-            {
-                stdio: "pipe",
-            },
-        ).toString();
+        const child = spawn("inkscape", [
+            "--pipe",
+            "--export-plain-svg",
+            "--pdf-poppler",
+            "--export-type",
+            "svg",
+            "--export-filename",
+            "-",
+            source,
+        ]);
+
+        child.stdout.on("data", (data: Buffer) => (output += data.toString()));
+        await new Promise((resolve) => child.on("close", () => resolve(output)));
     } else {
         throw new Error(`Unsupported file type: ${type}`);
     }

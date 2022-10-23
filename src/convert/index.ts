@@ -8,7 +8,7 @@ async function convert(
     height: number | null,
     verbose = false,
 ): Promise<Buffer> {
-    const svg = to_svg(src, verbose);
+    const svg = await to_svg(src, verbose);
     return await from_svg(svg, to, width, height, verbose);
 }
 

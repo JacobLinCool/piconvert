@@ -129,7 +129,7 @@ export class Converter extends EventEmitter {
             }
         }
 
-        const svg = to_svg(source, verbose);
+        const svg = await to_svg(source, verbose);
 
         for (const config of configs) {
             await this.convert(svg, source, dir, config, verbose);
