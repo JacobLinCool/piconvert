@@ -35,7 +35,7 @@
         "@types/js-yaml": "^4.0.5",
         "@types/node": "^18.11.2",
         "@types/sharp": "^0.31.0",
-        "@types/svgo": "^2.6.4",
+        "@types/svgo": "^3.0.0",
         "@typescript-eslint/eslint-plugin": "^5.40.1",
         "@typescript-eslint/parser": "^5.40.1",
         "eslint": "^8.25.0",
@@ -52,7 +52,7 @@
         "commander": "^9.4.1",
         "js-yaml": "^4.1.0",
         "sharp": "^0.31.1",
-        "svgo": "^2.8.0"
+        "svgo": "^3.0.0"
     },
     "homepage": "https://github.com/JacobLinCool/piconvert",
     "bugs": {
